@@ -1,0 +1,168 @@
+/** @import must precede all other statements */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /**
+   * Tailwind CSS theme
+   * tailwind.config.ts expects the following color variables to be expressed as HSL values.
+   * A different format will require also updating the theme in tailwind.config.ts.
+  */
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 230 15% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 230 15% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 230 15% 15%;
+
+    /* ALL4U Primary Brand - Electric Blue */
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
+    --primary-50: 217 100% 97%;
+    --primary-100: 217 96% 91%;
+    --primary-200: 217 97% 84%;
+    --primary-300: 217 94% 73%;
+    --primary-400: 217 93% 65%;
+    --primary-500: 217 91% 60%;
+    --primary-600: 217 84% 53%;
+    --primary-700: 217 77% 47%;
+    --primary-800: 217 70% 40%;
+    --primary-900: 217 65% 33%;
+    --primary-950: 217 70% 22%;
+
+    --secondary: 220 13% 96%;
+    --secondary-foreground: 230 15% 15%;
+
+    --muted: 220 13% 96%;
+    --muted-foreground: 220 9% 46%;
+
+    --accent: 220 13% 96%;
+    --accent-foreground: 230 15% 15%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 217 91% 60%;
+
+    --radius: 0.75rem;
+
+    /* ALL4U Brand Colors */
+    --brand-50: 217 100% 97%;
+    --brand-100: 217 96% 91%;
+    --brand-200: 217 97% 84%;
+    --brand-300: 217 94% 73%;
+    --brand-400: 217 93% 65%;
+    --brand-500: 217 91% 60%;
+    --brand-600: 217 84% 53%;
+    --brand-700: 217 77% 47%;
+    --brand-800: 217 70% 40%;
+    --brand-900: 217 65% 33%;
+    --brand-950: 217 70% 22%;
+
+    /* Semantic Colors */
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+    --danger: 0 84% 60%;
+    --danger-foreground: 0 0% 100%;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 217 91% 60%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 230 23% 9%;
+    --foreground: 220 13% 91%;
+
+    --card: 230 20% 11%;
+    --card-foreground: 220 13% 91%;
+
+    --popover: 230 20% 11%;
+    --popover-foreground: 220 13% 91%;
+
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
+    --primary-50: 217 70% 22%;
+    --primary-100: 217 65% 33%;
+    --primary-200: 217 70% 40%;
+    --primary-300: 217 77% 47%;
+    --primary-400: 217 84% 53%;
+    --primary-500: 217 91% 60%;
+    --primary-600: 217 93% 65%;
+    --primary-700: 217 94% 73%;
+    --primary-800: 217 97% 84%;
+    --primary-900: 217 96% 91%;
+    --primary-950: 217 100% 97%;
+
+    --secondary: 230 17% 14%;
+    --secondary-foreground: 220 13% 91%;
+
+    --muted: 230 17% 14%;
+    --muted-foreground: 220 9% 56%;
+
+    --accent: 230 17% 14%;
+    --accent-foreground: 220 13% 91%;
+
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 220 13% 91%;
+
+    --border: 230 17% 14%;
+    --input: 230 17% 14%;
+    --ring: 217 91% 60%;
+
+    /* ALL4U Brand Colors - Dark Mode */
+    --brand-50: 217 70% 22%;
+    --brand-100: 217 65% 33%;
+    --brand-200: 217 70% 40%;
+    --brand-300: 217 77% 47%;
+    --brand-400: 217 84% 53%;
+    --brand-500: 217 91% 60%;
+    --brand-600: 217 93% 65%;
+    --brand-700: 217 94% 73%;
+    --brand-800: 217 97% 84%;
+    --brand-900: 217 96% 91%;
+    --brand-950: 217 100% 97%;
+
+    /* Semantic Colors - Dark Mode */
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+    --danger: 0 62% 30%;
+    --danger-foreground: 220 13% 91%;
+
+    --sidebar-background: 230 20% 11%;
+    --sidebar-foreground: 220 13% 91%;
+    --sidebar-primary: 217 91% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 230 17% 14%;
+    --sidebar-accent-foreground: 220 13% 91%;
+    --sidebar-border: 230 17% 14%;
+    --sidebar-ring: 217 91% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
