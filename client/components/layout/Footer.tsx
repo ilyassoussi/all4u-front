@@ -32,7 +32,7 @@ export default function Footer() {
               </div>
               <div className="flex items-center space-x-2 text-sm text-slate-300">
                 <PhoneIcon className="h-4 w-4" />
-                <span>+212 6XX-XXXXXX</span>
+                <span>+212 661 51 21 21</span>
               </div>
               <div className="flex items-center space-x-2 text-sm text-slate-300">
                 <EnvelopeIcon className="h-4 w-4" />

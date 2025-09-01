@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useCart } from "@/contexts/CartContext";
+import SliderHero from "@/components/ui/slider-hero";
+import BrandsShowcase from "@/components/ui/brands-showcase";
 import {
   StarIcon,
   TruckIcon,
@@ -149,7 +151,7 @@ export default function Index() {
                   Découvrir nos produits
                   <ArrowRightIcon className="ml-2 h-5 w-5" />
                 </Button>
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-brand-600">
+                <Button size="lg" variant="outline" className="border-white bg-transparent text-white hover:bg-white hover:text-brand-600">
                   Voir les promotions
                 </Button>
               </div>
@@ -169,17 +171,20 @@ export default function Index() {
               </div>
             </div>
             <div className="relative">
-              <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
-                <img 
-                  src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&h=400&fit=crop"
-                  alt="Electronics showcase"
-                  className="w-full h-80 object-cover rounded-lg"
-                />
-              </div>
+              <SliderHero
+                autoPlay={true}
+                autoPlayInterval={6000}
+                showDots={true}
+                showArrows={false}
+                className="shadow-2xl"
+              />
             </div>
           </div>
         </div>
       </section>
+
+      {/* Brands Showcase */}
+      <BrandsShowcase />
 
       {/* Features */}
       <section className="py-12 bg-muted/30">
@@ -216,47 +221,60 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Categories */}
-      <section className="py-16">
+
+      {/* Univers / Catégories - Blocs visuels */}
+
+      <section className="py-16 bg-gradient-to-br from-brand-50 via-brand-100 to-brand-200">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-foreground mb-4">Nos Catégories</h2>
+            <h2 className="text-3xl font-bold text-foreground mb-4">Univers & Catégories</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Explorez notre large gamme de produits électroniques soigneusement sélectionnés 
-              pour répondre à tous vos besoins technologiques.
+              Découvrez nos univers phares : Smartphones, Audio, Accessoires, Packs, Cadeaux.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {categories.map((category) => (
-              <Card key={category.name} className="group hover:shadow-lg transition-all duration-300 cursor-pointer">
-                <CardContent className="p-0">
-                  <div className="relative overflow-hidden rounded-t-lg">
-                    <img 
-                      src={category.image}
-                      alt={category.name}
-                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <div className="absolute top-4 right-4">
-                      <Badge className="bg-brand-500 hover:bg-brand-600 text-white">
-                        {category.count}
-                      </Badge>
-                    </div>
-                  </div>
-                  <div className="p-6">
-                    <div className="flex items-center space-x-2 mb-2">
-                      <span className="text-2xl">{category.icon}</span>
-                      <h3 className="text-lg font-semibold text-foreground group-hover:text-brand-600 transition-colors">
-                        {category.name}
-                      </h3>
-                    </div>
-                    <p className="text-muted-foreground text-sm mb-4">{category.description}</p>
-                    <Button variant="outline" size="sm" className="group-hover:bg-brand-50 group-hover:border-brand-200">
-                      Voir les produits
-                      <ArrowRightIcon className="ml-2 h-4 w-4" />
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {/* Exemple de blocs visuels */}
+            {[
+              {
+                name: "Smartphones",
+                image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&h=400&fit=crop",
+                description: "iPhone, Samsung, Xiaomi, Huawei...",
+                href: "/categories/telephones",
+                color: "from-blue-500 to-blue-700"
+              },
+              {
+                name: "Audio",
+                image: "https://images.unsplash.com/photo-1588423771073-b8903fbb85b5?w=600&h=400&fit=crop",
+                description: "AirPods, Soundcore, Soundpeats, Oraimo...",
+                href: "/categories/audio",
+                color: "from-purple-500 to-purple-700"
+              },
+              {
+                name: "Accessoires",
+                image: "https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?w=600&h=400&fit=crop",
+                description: "Chargeurs, câbles, protections, supports...",
+                href: "/categories/accessoires",
+                color: "from-green-500 to-green-700"
+              },
+              {
+                name: "Cadeaux & Packs",
+                image: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=600&h=400&fit=crop",
+                description: "Idées cadeaux tech, packs et bundles.",
+                href: "/categories/cadeau",
+                color: "from-pink-500 to-pink-700"
+              }
+            ].map((cat) => (
+              <div key={cat.name} className={`group relative rounded-3xl overflow-hidden shadow-xl bg-white hover:scale-105 transition-transform duration-300 border-2 border-transparent hover:border-brand-300`}>
+                <img src={cat.image} alt={cat.name} className="w-full h-56 object-cover group-hover:scale-110 transition-transform duration-300" />
+                <div className={`absolute inset-0 bg-gradient-to-t ${cat.color} opacity-60 group-hover:opacity-80 transition-opacity duration-300`}></div>
+                <div className="absolute bottom-0 left-0 right-0 p-6 text-white z-10">
+                  <h3 className="text-2xl font-bold mb-2 drop-shadow-lg">{cat.name}</h3>
+                  <p className="text-md mb-4 drop-shadow-lg">{cat.description}</p>
+                  <a href={cat.href} className="inline-block px-5 py-2 rounded-full bg-white text-brand-600 font-semibold shadow hover:bg-brand-50 transition-all">
+                    Découvrir
+                  </a>
+                </div>
+              </div>
             ))}
           </div>
         </div>
@@ -372,22 +390,65 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Newsletter */}
-      <section className="py-16 bg-brand-600">
+      {/* Idées Cadeaux & Promotions spéciales */}
+      <section className="py-16 bg-gradient-to-br from-pink-100 via-yellow-50 to-purple-100">
         <div className="container mx-auto px-4">
-          <div className="text-center text-white">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-foreground mb-4">Idées Cadeaux & Promotions</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Offrez le meilleur de la tech : sélection de cadeaux, packs, nouveautés et promos pour toutes les occasions.
+            </p>
+          </div>
+          <div className="flex flex-col md:flex-row gap-8 mb-8 justify-center">
+            <div className="flex-1 bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center justify-center border border-pink-200">
+              <img src="https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=400&h=300&fit=crop" alt="Cadeaux" className="w-32 h-32 object-cover rounded-xl mb-4" />
+              <h3 className="text-xl font-bold mb-2 text-pink-600">Cadeaux Tech</h3>
+              <p className="text-muted-foreground mb-4 text-center">Pour anniversaires, fêtes, surprises : écouteurs, montres, packs, accessoires…</p>
+              <a href="/categories/cadeau" className="inline-block px-5 py-2 rounded-full bg-pink-500 text-white font-semibold shadow hover:bg-pink-600 transition-all">Voir les idées</a>
+            </div>
+            <div className="flex-1 bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center justify-center border border-yellow-200">
+              <img src="https://images.unsplash.com/photo-1609592518760-b3aa87b1ea54?w=400&h=300&fit=crop" alt="Promos" className="w-32 h-32 object-cover rounded-xl mb-4" />
+              <h3 className="text-xl font-bold mb-2 text-yellow-600">Promotions Spéciales</h3>
+              <p className="text-muted-foreground mb-4 text-center">Profitez des offres du moment : remises, packs, nouveautés à prix réduit.</p>
+              <a href="/categories/promos" className="inline-block px-5 py-2 rounded-full bg-yellow-400 text-white font-semibold shadow hover:bg-yellow-500 transition-all">Voir les promos</a>
+            </div>
+            <div className="flex-1 bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center justify-center border border-purple-200">
+              <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=300&fit=crop" alt="Nouveautés" className="w-32 h-32 object-cover rounded-xl mb-4" />
+              <h3 className="text-xl font-bold mb-2 text-purple-600">Nouveautés</h3>
+              <p className="text-muted-foreground mb-4 text-center">Découvrez les dernières sorties et innovations tech à offrir ou s’offrir.</p>
+              <a href="/categories/nouveautes" className="inline-block px-5 py-2 rounded-full bg-purple-500 text-white font-semibold shadow hover:bg-purple-600 transition-all">Voir les nouveautés</a>
+            </div>
+          </div>
+          {/* Filtres visuels */}
+          <div className="flex flex-wrap gap-4 justify-center mb-8">
+            <button className="px-4 py-2 rounded-full bg-pink-100 text-pink-700 font-semibold hover:bg-pink-200 transition">Moins de 300 Dhs</button>
+            <button className="px-4 py-2 rounded-full bg-yellow-100 text-yellow-700 font-semibold hover:bg-yellow-200 transition">Cadeaux Anniversaire</button>
+            <button className="px-4 py-2 rounded-full bg-purple-100 text-purple-700 font-semibold hover:bg-purple-200 transition">Nouveautés</button>
+            <button className="px-4 py-2 rounded-full bg-green-100 text-green-700 font-semibold hover:bg-green-200 transition">Packs Duo</button>
+            <button className="px-4 py-2 rounded-full bg-blue-100 text-blue-700 font-semibold hover:bg-blue-200 transition">Pour enfants</button>
+          </div>
+          {/* Visuel lifestyle */}
+          {/* <div className="flex justify-center">
+            <img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?w=800&h=300&fit=crop" alt="Lifestyle Cadeaux" className="rounded-2xl shadow-xl w-full max-w-3xl object-cover" />
+          </div> */}
+        </div>
+      </section>
+      {/* Newsletter */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <div className="text-center text-black">
             <h2 className="text-3xl font-bold mb-4">Restez Informé</h2>
-            <p className="text-brand-100 mb-8 max-w-2xl mx-auto">
-              Inscrivez-vous à notre newsletter pour recevoir les dernières offres 
+            <p className="text-gray-700 mb-8 max-w-2xl mx-auto">
+              Inscrivez-vous à notre newsletter pour recevoir les dernières offres
               et nouveautés directement dans votre boîte e-mail.
             </p>
             <div className="max-w-md mx-auto flex gap-2">
               <input 
                 type="email" 
                 placeholder="Votre adresse e-mail"
-                className="flex-1 px-4 py-3 rounded-lg text-foreground"
+                className="flex-1 px-4 py-3 rounded-lg border border-gray-300 text-foreground"
               />
-              <Button className="bg-white text-brand-600 hover:bg-brand-50 font-semibold px-6">
+              <Button className="bg-blue-600 text-white hover:bg-blue-700 font-semibold px-6">
                 S'inscrire
               </Button>
             </div>

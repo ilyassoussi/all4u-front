@@ -20,8 +20,24 @@ import AdminDashboard from "./pages/admin/Dashboard";
 import ProductsManagement from "./pages/admin/ProductsManagement";
 import OrdersManagement from "./pages/admin/OrdersManagement";
 import CustomersManagement from "./pages/admin/CustomersManagement";
+import CategoriesManagement from "./pages/admin/CategoriesManagement";
+import BrandsManagement from "./pages/admin/BrandsManagement";
+import SliderManagement from "./pages/admin/SliderManagement";
 import Cart from "./pages/Cart";
 import Wishlist from "./pages/Wishlist";
+import Brands from "./pages/Brands";
+import AppleBrand from "./pages/brands/apple";
+import SamsungBrand from "./pages/brands/samsung";
+import XiaomiBrand from "./pages/brands/xiaomi";
+import AnkerBrand from "./pages/brands/anker";
+import BelkinBrand from "./pages/brands/belkin";
+import BaseusBrand from "./pages/brands/baseus";
+import HuaweiBrand from "./pages/brands/huawei";
+import OraimoBrand from "./pages/brands/oraimo";  
+import SoundPEATSBrand from "./pages/brands/soundpeats";
+import SoundcoreBrand from "./pages/brands/soundcore";
+import GiftPage from "./pages/GiftPage";
+import PromotionsManagement from "./pages/admin/PromotionsManagement";
 
 const queryClient = new QueryClient();
 
@@ -77,19 +93,6 @@ const App = () => (
               ]}
             />
           } />
-          <Route path="/categories/cadeau" element={
-            <PlaceholderPage
-              title="Cadeaux"
-              description="Idées cadeaux tech pour toutes les occasions."
-              suggestions={[
-                "Cadeaux par budget",
-                "Cadeaux par occasion (anniversaire, fête)",
-                "Coffrets cadeaux",
-                "Cartes cadeaux électroniques",
-                "Emballage cadeau gratuit"
-              ]}
-            />
-          } />
           <Route path="/categories/chargeurs-cables" element={
             <PlaceholderPage
               title="Chargeurs & Câbles"
@@ -131,8 +134,24 @@ const App = () => (
               ]}
             />
           } />
+          <Route path="/categories/cadeau" element={<GiftPage />} />
           <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/brands" element={<Brands />} />
+          <Route path="/brands/apple" element={<AppleBrand />} />
+          <Route path="/brands/samsung" element={<SamsungBrand />} />
+          <Route path="/brands/xiaomi" element={<XiaomiBrand />} />
+          <Route path="/brands/oraimo" element={<OraimoBrand />} />
+          <Route path="/brands/soundcore" element={<SoundcoreBrand />} />
+          <Route path="/brands/soundpeats" element={<SoundPEATSBrand />} />
+          <Route path="/brands/anker" element={<AnkerBrand />} />
+          <Route path="/brands/belkin" element={<BelkinBrand />} />
+          <Route path="/brands/baseus" element={<BaseusBrand />} />
+          <Route path="/brands/huawei" element={<HuaweiBrand />} />
+          <Route path="/brands/anker" element={<AnkerBrand />} />
+          <Route path="/brands/belkin" element={<BelkinBrand />} />
+          <Route path="/brands/baseus" element={<BaseusBrand />} />
+          <Route path="/brands/huawei" element={<HuaweiBrand />} />
 
           {/* Product Detail */}
           <Route path="/product/:id" element={<ProductDetail />} />
@@ -162,7 +181,7 @@ const App = () => (
               description="Plusieurs moyens pour nous joindre."
               suggestions={[
                 "Formulaire de contact",
-                "Téléphone: +212 6XX-XXXXXX",
+                "Téléphone: +212 661 51 21 21",
                 "Email: contact@all4u.ma",
                 "Adresse magasin Khemisset",
                 "Horaires d'ouverture"
@@ -200,7 +219,11 @@ const App = () => (
           {/* Admin Routes */}
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/products" element={<ProductsManagement />} />
+          <Route path="/admin/categories" element={<CategoriesManagement />} />
+          <Route path="/admin/brands" element={<BrandsManagement />} />
+          <Route path="/admin/slider" element={<SliderManagement />} />
           <Route path="/admin/orders" element={<OrdersManagement />} />
+          <Route path="/admin/promotions" element={<PromotionsManagement />} />
           <Route path="/admin/customers" element={<CustomersManagement />} />
           <Route path="/admin/settings" element={
             <PlaceholderPage

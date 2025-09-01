@@ -1,19 +1,28 @@
 import React, { createContext, useContext, useReducer, useEffect, ReactNode } from 'react';
+import { toast } from "@/components/ui/use-toast";
 
-export interface Product {
+interface Product {
   id: number;
   name: string;
   price: number;
   originalPrice?: number;
   image: string;
   rating: number;
-  reviews: number;
+  reviews: Review[];
   brand: string;
   category: string;
   inStock: boolean;
   features: string[];
   description?: string;
   specifications?: Record<string, string>;
+}
+
+interface Review {
+  id: number;
+  user: string;
+  rating: number;
+  comment: string;
+  date: string;
 }
 
 export interface CartItem extends Product {
@@ -192,8 +201,19 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   }, [wishlist.items]);
 
+  // toast importé en haut du fichier
   const addToCart = (product: Product) => {
     dispatchCart({ type: 'ADD_TO_CART', product });
+    toast({
+      title: "Produit ajouté au panier",
+      description: `${product.name} a été ajouté à votre panier !`,
+      duration: 2000,
+    });
+    const cartIcon = document.getElementById('cart-header-icon');
+    if (cartIcon) {
+      cartIcon.classList.add('animate-cart-bounce');
+      setTimeout(() => cartIcon.classList.remove('animate-cart-bounce'), 700);
+    }
   };
 
   const removeFromCart = (productId: number) => {

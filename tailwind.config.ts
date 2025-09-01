@@ -82,6 +82,20 @@ export default {
           900: "hsl(var(--brand-900))",
           950: "hsl(var(--brand-950))",
         },
+        // Admin Back-office Colors
+        admin: {
+          50: "hsl(var(--admin-50))",
+          100: "hsl(var(--admin-100))",
+          200: "hsl(var(--admin-200))",
+          300: "hsl(var(--admin-300))",
+          400: "hsl(var(--admin-400))",
+          500: "hsl(var(--admin-500))",
+          600: "hsl(var(--admin-600))",
+          700: "hsl(var(--admin-700))",
+          800: "hsl(var(--admin-800))",
+          900: "hsl(var(--admin-900))",
+          950: "hsl(var(--admin-950))",
+        },
         success: {
           DEFAULT: "hsl(var(--success))",
           foreground: "hsl(var(--success-foreground))",

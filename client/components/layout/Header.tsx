@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { Popover } from "@/components/ui/popover";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   MagnifyingGlassIcon,
   ShoppingCartIcon,
@@ -18,18 +20,20 @@ import { useCart } from "@/contexts/CartContext";
 
 const categories = [
   { name: "AirPods", href: "/categories/airpods", icon: "🎧" },
+  { name: "Chargeurs & Câbles", href: "/categories/chargeurs-cables", icon: "🔌" },
   { name: "PowerBank", href: "/categories/powerbank", icon: "🔋" },
   { name: "Téléphones", href: "/categories/telephones", icon: "📱" },
   { name: "Watch Électronique", href: "/categories/watches", icon: "⌚" },
   { name: "Pack", href: "/categories/pack", icon: "📦" },
   { name: "Cadeau", href: "/categories/cadeau", icon: "🎁" },
-  { name: "Chargeurs & Câbles", href: "/categories/chargeurs-cables", icon: "🔌" },
 ];
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const { cart, wishlist } = useCart();
+  const [cartPopoverOpen, setCartPopoverOpen] = useState(false);
+  const cartIconRef = useRef(null);
 
   return (
     <header className="bg-white border-b border-border shadow-sm">
@@ -44,7 +48,7 @@ export default function Header() {
               </div>
               <div className="hidden md:flex items-center gap-1">
                 <PhoneIcon className="h-4 w-4" />
-                <span>+212 6XX-XXXXXX</span>
+                <span>+212 661 51 21 21</span>
               </div>
             </div>
             <div className="flex items-center gap-4">
@@ -105,21 +109,53 @@ export default function Header() {
             </Button>
 
             {/* Account */}
-            <Button variant="ghost" size="icon" className="hidden sm:flex">
+            <a href="/login" className="hidden sm:flex">
               <UserIcon className="h-5 w-5" />
-            </Button>
+            </a>
 
             {/* Cart */}
-            <Button variant="ghost" size="icon" className="relative" asChild>
-              <a href="/cart">
+            <div className="relative" onMouseEnter={() => setCartPopoverOpen(true)} onMouseLeave={() => setCartPopoverOpen(false)}>
+              <Button variant="ghost" size="icon" className="relative" ref={cartIconRef}>
                 <ShoppingCartIcon className="h-5 w-5" />
                 {cart.itemsCount > 0 && (
                   <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs bg-brand-500 hover:bg-brand-600">
                     {cart.itemsCount}
                   </Badge>
                 )}
-              </a>
-            </Button>
+              </Button>
+              {cartPopoverOpen && (
+                <div className="absolute right-0 mt-2 w-80 z-50 animate-fade-in">
+                  <Card className="shadow-2xl border border-brand-100">
+                    <CardContent>
+                      <div className="font-bold text-lg mb-2">Mon panier</div>
+                      {cart.items.length === 0 ? (
+                        <div className="text-muted-foreground text-sm">Votre panier est vide.</div>
+                      ) : (
+                        <ul className="divide-y divide-border max-h-60 overflow-y-auto">
+                          {cart.items.map(item => (
+                            <li key={item.id} className="py-2 flex items-center gap-3">
+                              <img src={item.image} alt={item.name} className="h-10 w-10 rounded bg-muted object-cover" />
+                              <div className="flex-1">
+                                <div className="font-semibold text-sm">{item.name}</div>
+                                <div className="text-xs text-muted-foreground">x{item.quantity}</div>
+                              </div>
+                              <div className="font-bold text-sm">{item.price} د.م.</div>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                      <div className="mt-4 flex justify-between items-center">
+                        <span className="font-bold">Total :</span>
+                        <span className="font-bold text-brand-600">{cart.total} د.م.</span>
+                      </div>
+                      <Button className="w-full mt-4" asChild>
+                        <a href="/cart">Voir le panier</a>
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </div>
+              )}
+            </div>
 
             {/* Mobile menu */}
             <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import AdminLayout from "@/components/admin/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -6,8 +7,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Dialog,
   DialogContent,
@@ -38,7 +37,7 @@ import {
 } from "@heroicons/react/24/outline";
 
 // Mock product data
-const mockProducts = [
+const mockProducts: Product[] = [
   {
     id: "1",
     name: "AirPods Pro (2ème génération)",
@@ -118,6 +117,9 @@ interface Product {
   brand: string;
   createdAt: string;
   sales: number;
+  features?: string;
+  specifications?: string;
+  images?: string[];
 }
 
 const categories = [
@@ -152,14 +154,17 @@ export default function ProductsManagement() {
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
   const [formData, setFormData] = useState({
-    name: "",
-    category: "",
-    price: "",
-    stock: "",
-    status: "active" as "active" | "inactive",
-    image: "",
-    description: "",
-    brand: ""
+  name: "",
+  category: "",
+  price: "",
+  stock: "",
+  status: "active" as "active" | "inactive",
+  image: "",
+  description: "",
+  brand: "",
+  features: "",
+  specifications: "",
+  images: [] as string[]
   });
 
   useEffect(() => {
@@ -201,7 +206,10 @@ export default function ProductsManagement() {
       status: "active",
       image: "",
       description: "",
-      brand: ""
+      brand: "",
+      features: "",
+      specifications: "",
+      images: []
     });
     setEditingProduct(null);
   };
@@ -216,7 +224,10 @@ export default function ProductsManagement() {
       status: product.status,
       image: product.image,
       description: product.description,
-      brand: product.brand
+      brand: product.brand,
+      features: product.features || "",
+      specifications: product.specifications || "",
+      images: Array.isArray(product.images) ? product.images : []
     });
     setIsDialogOpen(true);
   };
@@ -231,7 +242,8 @@ export default function ProductsManagement() {
       ...formData,
       price: Number(formData.price),
       stock: Number(formData.stock),
-      image: formData.image || "/placeholder.svg"
+      image: formData.image || "/placeholder.svg",
+      images: Array.isArray(formData.images) ? formData.images : []
     };
 
     if (editingProduct) {
@@ -276,316 +288,349 @@ export default function ProductsManagement() {
       : <Badge variant="outline">Inactif</Badge>;
   };
 
-  return (
-    <div className="min-h-screen bg-muted/30">
-      {/* Header */}
-      <div className="bg-white border-b border-border">
-        <div className="px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-foreground">
-                Gestion des Produits
-              </h1>
-              <p className="text-muted-foreground">
-                Gérez votre catalogue de produits
-              </p>
-            </div>
-            <div className="flex items-center space-x-3">
-              <Button variant="outline" asChild>
-                <a href="/admin/dashboard">← Retour au tableau de bord</a>
-              </Button>
-              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button onClick={resetForm}>
-                    <PlusIcon className="mr-2 h-4 w-4" />
-                    Ajouter un produit
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-                  <DialogHeader>
-                    <DialogTitle>
-                      {editingProduct ? "Modifier le produit" : "Ajouter un nouveau produit"}
-                    </DialogTitle>
-                    <DialogDescription>
-                      Remplissez les informations du produit ci-dessous.
-                    </DialogDescription>
-                  </DialogHeader>
-                  
-                  <div className="grid gap-4 py-4">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="name">Nom du produit *</Label>
-                        <Input
-                          id="name"
-                          value={formData.name}
-                          onChange={(e) => setFormData({...formData, name: e.target.value})}
-                          placeholder="Ex: AirPods Pro..."
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="brand">Marque *</Label>
-                        <Select value={formData.brand} onValueChange={(value) => setFormData({...formData, brand: value})}>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Sélectionner une marque" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {brands.map(brand => (
-                              <SelectItem key={brand} value={brand}>{brand}</SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="category">Catégorie *</Label>
-                        <Select value={formData.category} onValueChange={(value) => setFormData({...formData, category: value})}>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Sélectionner une catégorie" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {categories.map(category => (
-                              <SelectItem key={category} value={category}>{category}</SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="status">Statut</Label>
-                        <Select value={formData.status} onValueChange={(value: "active" | "inactive") => setFormData({...formData, status: value})}>
-                          <SelectTrigger>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="active">Actif</SelectItem>
-                            <SelectItem value="inactive">Inactif</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="price">Prix (د.م.) *</Label>
-                        <Input
-                          id="price"
-                          type="number"
-                          value={formData.price}
-                          onChange={(e) => setFormData({...formData, price: e.target.value})}
-                          placeholder="0"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="stock">Stock *</Label>
-                        <Input
-                          id="stock"
-                          type="number"
-                          value={formData.stock}
-                          onChange={(e) => setFormData({...formData, stock: e.target.value})}
-                          placeholder="0"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="description">Description</Label>
-                      <Textarea
-                        id="description"
-                        value={formData.description}
-                        onChange={(e) => setFormData({...formData, description: e.target.value})}
-                        placeholder="Description détaillée du produit..."
-                        rows={3}
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="image">URL de l'image</Label>
-                      <Input
-                        id="image"
-                        value={formData.image}
-                        onChange={(e) => setFormData({...formData, image: e.target.value})}
-                        placeholder="https://example.com/image.jpg"
-                      />
-                    </div>
-                  </div>
-
-                  <DialogFooter>
-                    <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
-                      Annuler
-                    </Button>
-                    <Button onClick={handleSave}>
-                      {editingProduct ? "Mettre à jour" : "Ajouter"}
-                    </Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="p-6">
-        {/* Filters and Search */}
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <FunnelIcon className="h-5 w-5" />
-              <span>Filtres et recherche</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+  const headerActions = (
+    <>
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogTrigger asChild>
+          <Button onClick={resetForm}>
+            <PlusIcon className="mr-2 h-4 w-4" />
+            Ajouter un produit
+          </Button>
+        </DialogTrigger>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>
+              {editingProduct ? "Modifier le produit" : "Ajouter un nouveau produit"}
+            </DialogTitle>
+            <DialogDescription>
+              Remplissez les informations du produit ci-dessous.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label>Rechercher</Label>
-                <div className="relative">
-                  <MagnifyingGlassIcon className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    placeholder="Nom ou marque..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-9"
-                  />
-                </div>
+                <Label htmlFor="name">Nom du produit *</Label>
+                <Input
+                  id="name"
+                  value={formData.name}
+                  onChange={(e) => setFormData({...formData, name: e.target.value})}
+                  placeholder="Ex: AirPods Pro..."
+                />
               </div>
-              
               <div className="space-y-2">
-                <Label>Catégorie</Label>
-                <Select value={filterCategory} onValueChange={setFilterCategory}>
+                <Label htmlFor="brand">Marque *</Label>
+                <Select value={formData.brand} onValueChange={(value) => setFormData({...formData, brand: value})}>
                   <SelectTrigger>
-                    <SelectValue />
+                    <SelectValue placeholder="Sélectionner une marque" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">Toutes les catégories</SelectItem>
+                    {brands.map(brand => (
+                      <SelectItem key={brand} value={brand}>{brand}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="category">Catégorie *</Label>
+                <Select value={formData.category} onValueChange={(value) => setFormData({...formData, category: value})}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Sélectionner une catégorie" />
+                  </SelectTrigger>
+                  <SelectContent>
                     {categories.map(category => (
                       <SelectItem key={category} value={category}>{category}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
-              
               <div className="space-y-2">
-                <Label>Statut</Label>
-                <Select value={filterStatus} onValueChange={setFilterStatus}>
+                <Label htmlFor="status">Statut</Label>
+                <Select value={formData.status} onValueChange={(value: "active" | "inactive") => setFormData({...formData, status: value})}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">Tous les statuts</SelectItem>
                     <SelectItem value="active">Actif</SelectItem>
                     <SelectItem value="inactive">Inactif</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
-              
-              <div className="space-y-2">
-                <Label>Trier par</Label>
-                <div className="flex space-x-2">
-                  <Select value={sortBy} onValueChange={setSortBy}>
-                    <SelectTrigger className="flex-1">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="name">Nom</SelectItem>
-                      <SelectItem value="price">Prix</SelectItem>
-                      <SelectItem value="stock">Stock</SelectItem>
-                      <SelectItem value="sales">Ventes</SelectItem>
-                      <SelectItem value="createdAt">Date création</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
-                  >
-                    {sortOrder === "asc" ? <ArrowUpIcon className="h-4 w-4" /> : <ArrowDownIcon className="h-4 w-4" />}
-                  </Button>
-                </div>
-              </div>
             </div>
-          </CardContent>
-        </Card>
 
-        {/* Products Table */}
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle>
-                Produits ({filteredProducts.length})
-              </CardTitle>
-              <div className="text-sm text-muted-foreground">
-                Total: {products.length} produits
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="price">Prix (د.م.) *</Label>
+                <Input
+                  id="price"
+                  type="number"
+                  value={formData.price}
+                  onChange={(e) => setFormData({...formData, price: e.target.value})}
+                  placeholder="0"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="stock">Stock *</Label>
+                <Input
+                  id="stock"
+                  type="number"
+                  value={formData.stock}
+                  onChange={(e) => setFormData({...formData, stock: e.target.value})}
+                  placeholder="0"
+                />
               </div>
             </div>
-          </CardHeader>
-          <CardContent>
-            <div className="rounded-md border">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Produit</TableHead>
-                    <TableHead>Catégorie</TableHead>
-                    <TableHead>Prix</TableHead>
-                    <TableHead>Stock</TableHead>
-                    <TableHead>Statut</TableHead>
-                    <TableHead>Ventes</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredProducts.map((product) => (
-                    <TableRow key={product.id}>
-                      <TableCell>
-                        <div className="flex items-center space-x-3">
-                          <img 
-                            src={product.image} 
-                            alt={product.name}
-                            className="w-10 h-10 rounded-lg object-cover"
-                          />
-                          <div>
-                            <p className="font-medium">{product.name}</p>
-                            <p className="text-sm text-muted-foreground">{product.brand}</p>
-                          </div>
-                        </div>
-                      </TableCell>
-                      <TableCell>{product.category}</TableCell>
-                      <TableCell className="font-medium">{formatPrice(product.price)}</TableCell>
-                      <TableCell>
-                        <div className="flex items-center space-x-2">
-                          <span>{product.stock}</span>
-                          {getStockBadge(product.stock)}
-                        </div>
-                      </TableCell>
-                      <TableCell>{getStatusBadge(product.status)}</TableCell>
-                      <TableCell>{product.sales} vendus</TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex justify-end space-x-1">
-                          <Button variant="ghost" size="icon" asChild>
-                            <a href={`/product/${product.id}`} target="_blank">
-                              <EyeIcon className="h-4 w-4" />
-                            </a>
-                          </Button>
-                          <Button variant="ghost" size="icon" onClick={() => handleEdit(product)}>
-                            <PencilIcon className="h-4 w-4" />
-                          </Button>
-                          <Button 
-                            variant="ghost" 
-                            size="icon" 
-                            onClick={() => handleDelete(product.id)}
-                            className="text-red-500 hover:text-red-700"
-                          >
-                            <TrashIcon className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+
+            <div className="space-y-2">
+              <Label htmlFor="description">Description</Label>
+              <Textarea
+                id="description"
+                value={formData.description}
+                onChange={(e) => setFormData({...formData, description: e.target.value})}
+                placeholder="Description détaillée du produit..."
+                rows={3}
+              />
             </div>
-          </CardContent>
-        </Card>
-      </div>
-    </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="features">Caractéristiques </Label>
+              <Textarea
+                id="features"
+                value={formData.features || ""}
+                onChange={(e) => setFormData({...formData, features: e.target.value})}
+                placeholder="Ex: Bluetooth 5.3, IPX4, etc."
+                rows={3}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="specifications">Spécifications </Label>
+              <Textarea
+                id="specifications"
+                value={formData.specifications || ""}
+                onChange={(e) => setFormData({...formData, specifications: e.target.value})}
+                placeholder="Ex: Autonomie, Puce, Dimensions, etc."
+                rows={3}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="images">Images du produit (2 à 5 fichiers)</Label>
+              <Input
+                id="images"
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={async (e) => {
+                  const files = Array.from(e.target.files || []).slice(0, 5);
+                  const imagesPromises = files.map(file => {
+                    return new Promise<string>((resolve, reject) => {
+                      const reader = new FileReader();
+                      reader.onload = () => resolve(reader.result as string);
+                      reader.onerror = reject;
+                      reader.readAsDataURL(file);
+                    });
+                  });
+                  const imagesBase64 = await Promise.all(imagesPromises);
+                  setFormData({...formData, images: imagesBase64});
+                }}
+              />
+              <div className="flex gap-2 mt-2">
+                {Array.isArray(formData.images) && formData.images.map((img, idx) => (
+                  <img key={idx} src={img} alt={`img${idx}`} className="h-12 w-12 object-cover rounded" />
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+              Annuler
+            </Button>
+            <Button onClick={handleSave}>
+              {editingProduct ? "Mettre à jour" : "Ajouter"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+
+  return (
+    <AdminLayout
+      title="Gestion des Produits" 
+      subtitle="Gérez votre catalogue de produits"
+      actions={headerActions}
+    >
+      {/* Filters and Search */}
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle className="flex items-center space-x-2">
+            <FunnelIcon className="h-5 w-5" />
+            <span>Filtres et recherche</span>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="space-y-2">
+              <Label>Rechercher</Label>
+              <div className="relative">
+                <MagnifyingGlassIcon className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Nom ou marque..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-9"
+                />
+              </div>
+            </div>
+            
+            <div className="space-y-2">
+              <Label>Catégorie</Label>
+              <Select value={filterCategory} onValueChange={setFilterCategory}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Toutes les catégories</SelectItem>
+                  {categories.map(category => (
+                    <SelectItem key={category} value={category}>{category}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div className="space-y-2">
+              <Label>Statut</Label>
+              <Select value={filterStatus} onValueChange={setFilterStatus}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Tous les statuts</SelectItem>
+                  <SelectItem value="active">Actif</SelectItem>
+                  <SelectItem value="inactive">Inactif</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div className="space-y-2">
+              <Label>Trier par</Label>
+              <div className="flex space-x-2">
+                <Select value={sortBy} onValueChange={setSortBy}>
+                  <SelectTrigger className="flex-1">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="name">Nom</SelectItem>
+                    <SelectItem value="price">Prix</SelectItem>
+                    <SelectItem value="stock">Stock</SelectItem>
+                    <SelectItem value="sales">Ventes</SelectItem>
+                    <SelectItem value="createdAt">Date création</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+                >
+                  {sortOrder === "asc" ? <ArrowUpIcon className="h-4 w-4" /> : <ArrowDownIcon className="h-4 w-4" />}
+                </Button>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Products Table */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <CardTitle>
+              Produits ({filteredProducts.length})
+            </CardTitle>
+            <div className="text-sm text-muted-foreground">
+              Total: {products.length} produits
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="rounded-md border">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Produit</TableHead>
+                  <TableHead>Images</TableHead>
+                  <TableHead>Catégorie</TableHead>
+                  <TableHead>Prix</TableHead>
+                  <TableHead>Stock</TableHead>
+                  <TableHead>Statut</TableHead>
+                  <TableHead>Ventes</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredProducts.map((product) => (
+                  <TableRow key={product.id}>
+                    <TableCell>
+                      <div className="flex items-center space-x-3">
+                        <div>
+                          <p className="font-medium">{product.name}</p>
+                          <p className="text-sm text-muted-foreground">{product.brand}</p>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex gap-1">
+                        {Array.isArray(product.images) && product.images.length > 0
+                          ? product.images.slice(0, 3).map((img, idx) => (
+                              <img key={idx} src={img} alt={`img${idx}`} className="h-10 w-10 object-cover rounded" />
+                            ))
+                          : (
+                              <img src={product.image} alt={product.name} className="h-10 w-10 object-cover rounded" />
+                            )}
+                      </div>
+                    </TableCell>
+                    <TableCell>{product.category}</TableCell>
+                    <TableCell className="font-medium">{formatPrice(product.price)}</TableCell>
+                    <TableCell>
+                      <div className="flex items-center space-x-2">
+                        <span>{product.stock}</span>
+                        {getStockBadge(product.stock)}
+                      </div>
+                    </TableCell>
+                    <TableCell>{getStatusBadge(product.status)}</TableCell>
+                    <TableCell>{product.sales} vendus</TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex justify-end space-x-1">
+                        <Button variant="ghost" size="icon" asChild>
+                          <a href={`/product/${product.id}`} target="_blank">
+                            <EyeIcon className="h-4 w-4" />
+                          </a>
+                        </Button>
+                        <Button variant="ghost" size="icon" onClick={() => handleEdit(product)}>
+                          <PencilIcon className="h-4 w-4" />
+                        </Button>
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          onClick={() => handleDelete(product.id)}
+                          className="text-red-500 hover:text-red-700"
+                        >
+                          <TrashIcon className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </CardContent>
+      </Card>
+    </AdminLayout>
   );
 }

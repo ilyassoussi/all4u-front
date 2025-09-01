@@ -6,7 +6,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
-import { useCart, Product } from "@/contexts/CartContext";
+import { useCart } from "@/contexts/CartContext";
+import type { Product } from "@/contexts/CartContext";
 import { 
   StarIcon,
   HeartIcon,
@@ -47,7 +48,6 @@ const mockProducts: Record<string, Product & {
       "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&h=600&fit=crop"
     ],
     rating: 4.8,
-    reviews: 127,
     brand: "Apple",
     category: "AirPods",
     inStock: true,
@@ -356,7 +356,7 @@ export default function ProductDetail() {
                     {Object.entries(product.specifications).map(([key, value]) => (
                       <div key={key} className="flex flex-col space-y-1">
                         <span className="font-medium text-foreground">{key}</span>
-                        <span className="text-muted-foreground">{value}</span>
+                        <span className="text-muted-foreground">{String(value)}</span>
                       </div>
                     ))}
                   </div>

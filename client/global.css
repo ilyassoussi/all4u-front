@@ -36,6 +36,19 @@
     --primary-900: 217 65% 33%;
     --primary-950: 217 70% 22%;
 
+    /* Admin Back-office Professional Colors */
+    --admin-50: 215 25% 97%;
+    --admin-100: 215 24% 93%;
+    --admin-200: 215 24% 87%;
+    --admin-300: 215 20% 65%;
+    --admin-400: 215 16% 47%;
+    --admin-500: 215 19% 35%;
+    --admin-600: 215 25% 27%;
+    --admin-700: 215 28% 22%;
+    --admin-800: 215 32% 17%;
+    --admin-900: 215 35% 12%;
+    --admin-950: 215 40% 8%;
+
     --secondary: 220 13% 96%;
     --secondary-foreground: 230 15% 15%;
 
