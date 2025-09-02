@@ -38,6 +38,9 @@ import SoundPEATSBrand from "./pages/brands/soundpeats";
 import SoundcoreBrand from "./pages/brands/soundcore";
 import GiftPage from "./pages/GiftPage";
 import PromotionsManagement from "./pages/admin/PromotionsManagement";
+import Orders from "./pages/Orders";
+import Checkout from "./pages/Checkout";
+
 
 const queryClient = new QueryClient();
 
@@ -137,6 +140,8 @@ const App = () => (
           <Route path="/categories/cadeau" element={<GiftPage />} />
           <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/orders" element={<Orders />} />
           <Route path="/brands" element={<Brands />} />
           <Route path="/brands/apple" element={<AppleBrand />} />
           <Route path="/brands/samsung" element={<SamsungBrand />} />

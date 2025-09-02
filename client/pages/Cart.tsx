@@ -1,3 +1,4 @@
+import {useNavigate} from "react-router-dom";
 import Layout from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,6 +18,7 @@ import {
 
 export default function Cart() {
   const { cart, removeFromCart, updateQuantity, addToWishlist, clearCart } = useCart();
+  const navigate = useNavigate();
 
   const formatPrice = (price: number) => {
     return `${price.toLocaleString()} د.م.`;
@@ -251,7 +253,9 @@ export default function Cart() {
                 </div>
 
                 <div className="space-y-3">
-                  <Button className="w-full bg-brand-500 hover:bg-brand-600" size="lg">
+                  <Button
+                  onClick={() => navigate('/checkout')}
+                  className="w-full bg-brand-500 hover:bg-brand-600" size="lg">
                     Passer la commande
                   </Button>
                   <Button variant="outline" className="w-full" size="lg">
